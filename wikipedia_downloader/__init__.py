@@ -1,3 +1,9 @@
+"""Downloads Wikipedia data dumps.
+
+Functions:
+    download_sql_dump: Downloads and decompress a Wikipedia SQL dump
+"""
+
 # Standard library imports
 from gzip import GzipFile
 from shutil import copyfileobj
@@ -7,6 +13,15 @@ import os
 BASE_URL = "https://dumps.wikimedia.org/"
 
 def download_sql_dump(language, file, dump = "latest", target_dir = "."):
+    """Downloads and decompresses a Wikipedia SQL dump.
+
+    Args:
+        language: Wikipedia name (language code).
+        file: File name.
+        dump: Dump version.
+        target_dir: Target directory.
+    """
+    
     # Return the filename of a .sql file
     def _get_name():
         return "{}wiki-{}-{}.sql".format(language, dump, file)
