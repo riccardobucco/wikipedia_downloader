@@ -17,7 +17,7 @@ def download_sql_dump(language, file, dump = "latest", target_dir = "."):
         filename = _get_name()
         return "{}{}.gz".format(wikipedia_base_url, filename)
     
-    with urlopen(_get_url()) as res:
-        with GzipFile(fileobj=res) as uncompressed_res:
-            with open(os.path.join(target_dir, _get_name()), 'wb') as out_file:
+    with urlopen(_get_url()) as res, \
+         GzipFile(fileobj=res) as uncompressed_res, \
+         open(os.path.join(target_dir, _get_name()), 'wb') as out_file:
                 copyfileobj(uncompressed_res, out_file)
