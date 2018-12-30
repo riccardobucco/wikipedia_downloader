@@ -12,7 +12,7 @@ import os
 
 BASE_URL = "https://dumps.wikimedia.org/"
 
-def download_sql_dump(language, file, dump = "latest", target_dir = "."):
+def download_sql_dump(language, file, dump="latest", target_dir="."):
     """Downloads and decompresses a Wikipedia SQL dump.
 
     Args:
@@ -21,7 +21,7 @@ def download_sql_dump(language, file, dump = "latest", target_dir = "."):
         dump: Dump version.
         target_dir: Target directory.
     """
-    
+
     # Return the filename of a .sql file
     def _get_name():
         return "{}wiki-{}-{}.sql".format(language, dump, file)
@@ -31,8 +31,8 @@ def download_sql_dump(language, file, dump = "latest", target_dir = "."):
         wikipedia_base_url = "{}{}wiki/{}/".format(BASE_URL, language, dump)
         filename = _get_name()
         return "{}{}.gz".format(wikipedia_base_url, filename)
-    
+
     with urlopen(_get_url()) as res, \
          GzipFile(fileobj=res) as uncompressed_res, \
          open(os.path.join(target_dir, _get_name()), 'wb') as out_file:
-                copyfileobj(uncompressed_res, out_file)
+        copyfileobj(uncompressed_res, out_file)
