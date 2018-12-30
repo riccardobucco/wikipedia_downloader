@@ -16,3 +16,5 @@ pip install wikipedia_downloader
   - *file*: File name.
   - *dump*: Dump version.
   - *target_dir*: Target directory.
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
