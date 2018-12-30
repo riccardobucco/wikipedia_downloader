@@ -7,7 +7,7 @@ pip install wikipedia_downloader
 ```
 ## Documentation
 ### Functions
-- wikipedia_downloader.**download_sql_dump**(*language*, *file*, *dump=latest*, *target_dir="."*)
+- wikipedia_downloader.**download_sql_dump**(*language*, *file*, *dump="latest"*, *target_dir="."*)
 
   Downloads and decompresses a Wikipedia SQL dump.
   
