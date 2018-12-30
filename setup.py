@@ -1,3 +1,5 @@
+"""Build script for setuptools."""
+
 # Standard library imports
 import setuptools
 
