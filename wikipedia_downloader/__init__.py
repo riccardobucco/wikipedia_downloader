@@ -42,7 +42,7 @@ def download_sql_dump(language, file, dump="latest", target_dir="."):
          open(os.path.join(target_dir, _get_name(language, dump, file)), 'wb') as out_file:
         copyfileobj(uncompressed_res, out_file)
 
-def get_dataframe(language, file, dump="latest", select=None):
+def get_dataframe(language, file, dump="latest", select=None, where=None):
     with urlopen(_get_url(language, dump, file)) as res:
         with GzipFile(fileobj=res) as uncompressed_res:
             # Get names of file's columns
@@ -58,17 +58,19 @@ def get_dataframe(language, file, dump="latest", select=None):
             if select is None:
                 select = col_names
             cols_to_keep = [name in select for name in col_names]
+            # Get a map col_name -> col_index
+            name_to_index = {name: index for index, name in enumerate(col_names)}
             # Parse the file and build the pandas.DataFrame
             linestart = "INSERT INTO `{}` VALUES ".format(file)
-            lineend = ";\n"
             tmp_dfs = []
             for line in uncompressed_res:
                 line = line.decode("utf-8")
                 if line.startswith("INSERT"):
                     values = [(col for keep, col in zip(cols_to_keep, row) if keep is True)
                               for row in literal_eval(line.lstrip(linestart)
-                                                      .rstrip(lineend)
-                                                      .replace(",NULL", ",None"))]
+                                                      .rstrip(";\n")
+                                                      .replace(",NULL", ",None"))
+                              if all(where[name](row[name_to_index[name]]) for name in where)]
                     columns = [name for keep, name in zip(cols_to_keep, col_names) if keep is True]
                     tmp_dfs.append(pd.DataFrame.from_records(values, columns=columns))
     return pd.concat(tmp_dfs)
