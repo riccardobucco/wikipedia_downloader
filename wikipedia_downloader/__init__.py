@@ -1,7 +1,8 @@
 """Downloads Wikipedia data dumps.
 
 Functions:
-    download_sql_dump: Downloads and decompress a Wikipedia SQL dump
+    download_sql_dump: Downloads and decompress a Wikipedia SQL dump.
+    get_dataframe: Builds a pandas.DataFrame from a Wikipedia SQL dump.
 """
 
 # Standard library imports
@@ -43,6 +44,19 @@ def download_sql_dump(language, file, dump="latest", target_dir="."):
         copyfileobj(uncompressed_res, out_file)
 
 def get_dataframe(language, file, dump="latest", select=None, where=None):
+    """Builds a pandas.DataFrame from a Wikipedia SQL dump.
+
+    Args:
+        language: Wikipedia name (language code).
+        file: File name.
+        dump: Dump version.
+        select: Columns to be kept.
+        where: Functions used to filter records.
+
+    Returns:
+        pandas.DataFrame
+    """
+
     with urlopen(_get_url(language, dump, file)) as res:
         with GzipFile(fileobj=res) as uncompressed_res:
             # Get names of file's columns
