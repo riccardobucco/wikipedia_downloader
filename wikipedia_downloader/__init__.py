@@ -78,9 +78,10 @@ def get_dataframe(language, file, dump="latest", select=None, where=None):
             linestart = "INSERT INTO `{}` VALUES ".format(file)
             tmp_dfs = []
             for line in uncompressed_res:
-                line = line.decode("utf-8")
+                line = line.decode("latin1")
                 if line.startswith("INSERT"):
-                    values = [(col for keep, col in zip(cols_to_keep, row) if keep is True)
+                    values = [(col.encode("latin1").decode("utf-8") if isinstance(col, str) else col
+                               for keep, col in zip(cols_to_keep, row) if keep is True)
                               for row in literal_eval(line.lstrip(linestart)
                                                       .rstrip(";\n")
                                                       .replace(",NULL", ",None"))
